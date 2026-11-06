@@ -1,0 +1,26 @@
+
+{
+  "scheme_name": "PM-KISAN",
+  "objective": "To supplement the financial needs of landholding farmers' families for procuring agricultural inputs and meeting domestic needs.",
+  "benefit": "Rs. 6000 per annum per family in three equal instalments of Rs. 2000 every four months.",
+  "eligibility": "All landholding farmers' families having cultivable land in their names are eligible, subject to exclusions.",
+  "exclusions": [
+    "All institutional landholders.",
+    "Farmer families with one or more members belonging to the specified excluded categories.",
+    "Former and present holders of constitutional posts.",
+    "Former and present Ministers and specified elected representatives.",
+    "Serving or retired government officers and employees, subject to stated exceptions.",
+    "Superannuated or retired pensioners receiving Rs. 10000 or more per month, subject to stated exceptions.",
+    "Persons who paid income tax in the last assessment year.",
+    "Specified professionals such as doctors, engineers, lawyers, chartered accountants and architects."
+  ],
+  "application_process": "Application through Common Service Centres (CSCs).",
+  "documents_required": [
+    "Aadhaar Card",
+    "Landholding Papers",
+    "Savings Bank Account"
+  ],
+  "ministry": null,
+  "source_url": "https://www.myscheme.gov.in/schemes/pm-kisan",
+  "source": "myScheme official portal"
+}
