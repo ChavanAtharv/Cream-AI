@@ -1,0 +1,14 @@
+[
+    {
+        "scheme_name": "PM-KISAN",
+        "ministry": null,
+        "benefit": "Rs. 6000 per annum per family in three equal instalments of Rs. 2000 every four months.",
+        "eligibility": "All landholding farmers' families having cultivable land in their names are eligible, subject to exclusions.",
+        "documents_required": [
+            "Aadhaar Card",
+            "Landholding Papers",
+            "Savings Bank Account"
+        ],
+        "source_url": "https://www.myscheme.gov.in/schemes/pm-kisan"
+    }
+]
