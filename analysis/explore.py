@@ -1,45 +1,43 @@
+"""Print three facts about the SchemeSaathi records using pandas.
 
-import json
-from pathlib import Path
+Run from the project root:
+    python -m analysis.explore
+"""
 
 import pandas as pd
 
-
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DATA_FILE = PROJECT_ROOT / "data" / "records.json"
+from app.records import load_records
 
 
-def explore_data():
-    if not DATA_FILE.exists():
-        print("Error: records.json not found. Run ingestion first.")
-        return
+def build_dataframe():
+    """Load records into a DataFrame with a document-count column."""
+    frame = pd.DataFrame(load_records())
+    frame["document_count"] = frame["documents_required"].apply(
+        lambda docs: len(docs) if isinstance(docs, list) else 0
+    )
+    return frame
 
-    try:
-        with DATA_FILE.open("r", encoding="utf-8") as file:
-            records = json.load(file)
 
-        if not isinstance(records, list) or not records:
-            print("No records available for analysis.")
-            return
+def main():
+    frame = build_dataframe()
 
-        df = pd.DataFrame(records)
+    # Fact 1: dataset size and category spread.
+    by_category = frame["category"].value_counts()
+    print(f"Fact 1: {len(frame)} schemes across {by_category.size} categories.")
+    print(f"        Largest category: {by_category.index[0]} "
+          f"({by_category.iloc[0]} schemes).")
 
-        print("\n--- SchemeSaathi Data Exploration ---")
+    # Fact 2: which scheme asks for the most documents.
+    top = frame.loc[frame["document_count"].idxmax()]
+    print(f"Fact 2: '{top['scheme_name']}' lists the most documents "
+          f"({top['document_count']}); average is "
+          f"{frame['document_count'].mean():.1f}.")
 
-        # Fact 1: Total number of schemes
-        print(f"\n1. Total schemes: {len(df)}")
-
-        # Fact 2: Number of schemes under each ministry
-        print("\n2. Schemes by ministry:")
-        print(df["ministry"].fillna("Unknown").value_counts().to_string())
-
-        # Fact 3: Missing values in each field
-        print("\n3. Missing values by field:")
-        print(df.isnull().sum().to_string())
-
-    except (OSError, json.JSONDecodeError) as error:
-        print(f"Could not read records: {error}")
+    # Fact 3: schemes with no documents listed.
+    empty = frame[frame["document_count"] == 0]["scheme_name"].tolist()
+    print(f"Fact 3: {len(empty)} scheme(s) list no documents: "
+          f"{', '.join(empty) if empty else 'none'}.")
 
 
 if __name__ == "__main__":
-    explore_data()
+    main()
