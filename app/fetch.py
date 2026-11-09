@@ -14,12 +14,15 @@ DOCUMENTS_DIR = PROJECT_ROOT / "data" / "documents"
 TIMEOUT_SECONDS = 15
 HEADERS = {"User-Agent": "SchemeSaathi/0.1 (student project)"}
 
-# name -> official URL. Replace or extend these with official guideline PDFs
-# from ministry websites; later days chunk these files for search.
 DOCUMENTS = {
     "pm_kisan_myscheme": "https://www.myscheme.gov.in/schemes/pm-kisan",
     "pmjjby_myscheme": "https://www.myscheme.gov.in/schemes/pmjjby",
     "dpiit_internship_myscheme": "https://www.myscheme.gov.in/schemes/dpiit-is",
+    "apy_myscheme": "https://www.myscheme.gov.in/schemes/apy",
+    "pm_svanidhi_myscheme": "https://www.myscheme.gov.in/schemes/pm-svanidhi",
+    "pm_vishwakarma_myscheme": "https://www.myscheme.gov.in/schemes/pmvs",
+    "pmay_g_myscheme": "https://www.myscheme.gov.in/schemes/pradhan-mantri-awaas-yojana-gramin",
+    "pmay_u_myscheme": "https://www.myscheme.gov.in/schemes/pmay-u",
 }
 
 CONTENT_TYPE_EXTENSIONS = {
