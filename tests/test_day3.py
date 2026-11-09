@@ -133,3 +133,12 @@ def test_download_all_continues_after_failure(tmp_path):
 
     assert list(saved) == ["good"]
     assert "bad" in failed
+
+def test_records_json_has_complete_records():
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parent.parent / "data" / "records.json"
+    records = json.loads(path.read_text(encoding="utf-8"))
+    assert len(records) >= 5
+    for record in records:
+        assert record["id"] and record["category"] and record["ministry"]
