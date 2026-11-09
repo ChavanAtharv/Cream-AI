@@ -1,0 +1,17 @@
+{
+    "id": "PM_VISHWAKARMA",
+    "scheme_name": "PM Vishwakarma",
+    "category": "Business & Entrepreneurship",
+    "ministry": "Ministry of Micro, Small and Medium Enterprises",
+    "benefit": "Recognition, skill training, toolkit incentive, concessional collateral-free enterprise loans and other support under scheme rules.",
+    "eligibility": "Artisans and craftspeople aged 18 or above working in one of the 18 notified traditional trades, subject to scheme exclusions.",
+    "documents": [
+        "Aadhaar",
+        "Aadhaar-linked mobile number",
+        "Bank account details",
+        "Ration card or family Aadhaar details where applicable",
+        "Trade details"
+    ],
+    "source_url": "https://www.myscheme.gov.in/schemes/pm-vishwakarma",
+    "verification_status": "details_from_prior_research"
+}

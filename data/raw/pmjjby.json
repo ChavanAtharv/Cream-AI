@@ -1,0 +1,16 @@
+{
+    "id": "PMJJBY",
+    "scheme_name": "Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY)",
+    "category": "Banking, Financial Services and Insurance",
+    "ministry": "Ministry of Finance",
+    "benefit": "Life insurance cover of ₹2 lakh for death due to any cause, subject to scheme terms.",
+    "eligibility": "Savings bank or participating post-office account holders aged 18–50 who consent to premium deduction.",
+    "documents": [
+        "Enrolment and consent form",
+        "Account details",
+        "KYC identity proof",
+        "Nominee details"
+    ],
+    "source_url": "https://www.myscheme.gov.in/schemes/pmjjby",
+    "verification_status": "details_from_prior_research"
+}

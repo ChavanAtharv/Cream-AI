@@ -1,0 +1,16 @@
+{
+    "id": "APY",
+    "scheme_name": "Atal Pension Yojana (APY)",
+    "category": "Banking, Financial Services and Insurance",
+    "ministry": "Ministry of Finance",
+    "benefit": "Guaranteed minimum monthly pension of ₹1,000 to ₹5,000 from age 60, based on contribution and joining age.",
+    "eligibility": "Indian citizens aged 18–40 with a savings bank or post-office account; income-tax payers are excluded from new enrolment under the applicable rule.",
+    "documents": [
+        "Savings bank or post-office account details",
+        "Aadhaar details/authentication",
+        "Enrolment and consent form",
+        "Nominee details"
+    ],
+    "source_url": "https://www.myscheme.gov.in/schemes/apy",
+    "verification_status": "details_from_prior_research"
+}

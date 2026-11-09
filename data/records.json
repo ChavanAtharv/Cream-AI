@@ -1,16 +1,92 @@
 [
     {
-        "scheme_name": "PM-KISAN",
+        "scheme_name": "Atal Pension Yojana (APY)",
+        "source_url": "https://www.myscheme.gov.in/schemes/apy",
+        "ministry": "Ministry of Finance",
+        "benefit": "Guaranteed minimum monthly pension of ₹1,000 to ₹5,000 from age 60, based on contribution and joining age.",
+        "eligibility": "Indian citizens aged 18–40 with a savings bank or post-office account; income-tax payers are excluded from new enrolment under the applicable rule.",
+        "documents_required": [],
+        "id": "APY",
+        "category": "Banking, Financial Services and Insurance"
+    },
+    {
+        "scheme_name": "DPIIT Internship Scheme",
+        "source_url": "https://www.myscheme.gov.in/schemes/dpiit-is",
+        "ministry": "Ministry of Commerce and Industry - DPIIT",
+        "benefit": "Internship exposure within DPIIT, stipend and experience certificate subject to the current scheme notice.",
+        "eligibility": "Students in eligible undergraduate, postgraduate or research programmes and disciplines, subject to the current DPIIT notice.",
+        "documents_required": [],
+        "id": "DPIIT_INTERNSHIP",
+        "category": "Education & Learning"
+    },
+    {
+        "scheme_name": "Kisan Credit Card (KCC)",
+        "source_url": "https://www.myscheme.gov.in/schemes/kcc",
+        "ministry": "Ministry of Agriculture and Farmers Welfare",
+        "benefit": "Credit access for eligible crop cultivation and specified agriculture and allied requirements.",
+        "eligibility": "Eligible owner cultivators, tenant farmers, oral lessees, sharecroppers and qualifying farmer groups.",
+        "documents_required": [],
+        "id": "KCC",
+        "category": "Agriculture, Rural & Environment"
+    },
+    {
+        "scheme_name": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
         "source_url": "https://www.myscheme.gov.in/schemes/pm-kisan",
         "ministry": "Ministry of Agriculture and Farmers Welfare",
-        "benefit": "Rs. 6000 per annum per family in three equal instalments of Rs. 2000 every four months.",
-        "eligibility": "All landholding farmers' families having cultivable land in their names are eligible, subject to exclusions.",
-        "documents_required": [
-            "Aadhaar Card",
-            "Landholding Papers",
-            "Savings Bank Account"
-        ],
-        "id": null,
-        "category": null
+        "benefit": "₹6,000 per year to eligible landholding farmer families in three equal instalments through direct benefit transfer.",
+        "eligibility": "Eligible landholding farmer families, subject to institutional-landholder and specified category-based exclusions.",
+        "documents_required": [],
+        "id": "PM_KISAN",
+        "category": "Agriculture, Rural & Environment"
+    },
+    {
+        "scheme_name": "PM Street Vendor's AtmaNirbhar Nidhi (PM SVANidhi)",
+        "source_url": "https://www.myscheme.gov.in/schemes/pm-svanidhi",
+        "ministry": "Ministry of Housing and Urban Affairs",
+        "benefit": "Progressive collateral-free working-capital loan tranches, interest subsidy and digital-transaction incentives under scheme rules.",
+        "eligibility": "Eligible street vendors identified by the Urban Local Body or holding the applicable vendor certificate, identity card or Letter of Recommendation.",
+        "documents_required": [],
+        "id": "PM_SVANIDHI",
+        "category": "Business & Entrepreneurship"
+    },
+    {
+        "scheme_name": "PM Vishwakarma",
+        "source_url": "https://www.myscheme.gov.in/schemes/pm-vishwakarma",
+        "ministry": "Ministry of Micro, Small and Medium Enterprises",
+        "benefit": "Recognition, skill training, toolkit incentive, concessional collateral-free enterprise loans and other support under scheme rules.",
+        "eligibility": "Artisans and craftspeople aged 18 or above working in one of the 18 notified traditional trades, subject to scheme exclusions.",
+        "documents_required": [],
+        "id": "PM_VISHWAKARMA",
+        "category": "Business & Entrepreneurship"
+    },
+    {
+        "scheme_name": "Pradhan Mantri Awas Yojana - Urban (PMAY-U)",
+        "source_url": "https://www.myscheme.gov.in/schemes/pmay-u",
+        "ministry": "Ministry of Housing and Urban Affairs",
+        "benefit": "Urban housing support through applicable construction, partnership, rental-housing and interest-subsidy components.",
+        "eligibility": "Eligible urban households in applicable income groups, subject to house-ownership, prior-benefit and component-specific conditions.",
+        "documents_required": [],
+        "id": "PMAY_U",
+        "category": "Housing & Shelter"
+    },
+    {
+        "scheme_name": "Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY)",
+        "source_url": "https://www.myscheme.gov.in/schemes/pmjjby",
+        "ministry": "Ministry of Finance",
+        "benefit": "Life insurance cover of ₹2 lakh for death due to any cause, subject to scheme terms.",
+        "eligibility": "Savings bank or participating post-office account holders aged 18–50 who consent to premium deduction.",
+        "documents_required": [],
+        "id": "PMJJBY",
+        "category": "Banking, Financial Services and Insurance"
+    },
+    {
+        "scheme_name": "Pradhan Mantri Awaas Yojana - Gramin (PMAY-G)",
+        "source_url": "https://www.myscheme.gov.in/schemes/pradhan-mantri-awaas-yojana-gramin",
+        "ministry": "Ministry of Rural Development",
+        "benefit": "Housing assistance for eligible rural households, with applicable toilet and wage-employment convergence.",
+        "eligibility": "Eligible rural houseless households and households in qualifying kutcha houses, identified through applicable beneficiary lists and verification.",
+        "documents_required": [],
+        "id": "PMAY_G",
+        "category": "Housing & Shelter"
     }
 ]

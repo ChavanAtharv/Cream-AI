@@ -1,0 +1,17 @@
+{
+    "id": "PMAY_U",
+    "scheme_name": "Pradhan Mantri Awas Yojana - Urban (PMAY-U)",
+    "category": "Housing & Shelter",
+    "ministry": "Ministry of Housing and Urban Affairs",
+    "benefit": "Urban housing support through applicable construction, partnership, rental-housing and interest-subsidy components.",
+    "eligibility": "Eligible urban households in applicable income groups, subject to house-ownership, prior-benefit and component-specific conditions.",
+    "documents": [
+        "Aadhaar details",
+        "Income proof/self-declaration",
+        "Identity and address proof",
+        "Bank details",
+        "Land/property documents where applicable"
+    ],
+    "source_url": "https://www.myscheme.gov.in/schemes/pmay-u",
+    "verification_status": "details_from_prior_research"
+}

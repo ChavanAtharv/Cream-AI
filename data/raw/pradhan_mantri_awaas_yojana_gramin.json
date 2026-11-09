@@ -1,0 +1,15 @@
+{
+    "id": "PMAY_G",
+    "scheme_name": "Pradhan Mantri Awaas Yojana - Gramin (PMAY-G)",
+    "category": "Housing & Shelter",
+    "ministry": "Ministry of Rural Development",
+    "benefit": "Housing assistance for eligible rural households, with applicable toilet and wage-employment convergence.",
+    "eligibility": "Eligible rural houseless households and households in qualifying kutcha houses, identified through applicable beneficiary lists and verification.",
+    "documents": [
+        "Beneficiary identity and household details",
+        "Bank or post-office account details",
+        "Additional information requested during local verification"
+    ],
+    "source_url": "https://www.myscheme.gov.in/schemes/pradhan-mantri-awaas-yojana-gramin",
+    "verification_status": "details_from_prior_research"
+}

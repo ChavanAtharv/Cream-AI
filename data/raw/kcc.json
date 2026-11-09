@@ -1,0 +1,17 @@
+{
+    "id": "KCC",
+    "scheme_name": "Kisan Credit Card (KCC)",
+    "category": "Agriculture, Rural & Environment",
+    "ministry": "Ministry of Agriculture and Farmers Welfare",
+    "benefit": "Credit access for eligible crop cultivation and specified agriculture and allied requirements.",
+    "eligibility": "Eligible owner cultivators, tenant farmers, oral lessees, sharecroppers and qualifying farmer groups.",
+    "documents": [
+        "Application form",
+        "Identity/address proof",
+        "Landholding or cultivation proof",
+        "Cropping and acreage details",
+        "Bank-required documents"
+    ],
+    "source_url": "https://www.myscheme.gov.in/schemes/kcc",
+    "verification_status": "central_filter_status_pending"
+}
