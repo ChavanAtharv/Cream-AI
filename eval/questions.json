@@ -1,0 +1,12 @@
+[
+  {"id": 1, "question": "I'm 25 years old. Can I enrol in Atal Pension Yojana?", "answerable": true},
+  {"id": 2, "question": "What insurance coverage does PMJJBY provide?", "answerable": true},
+  {"id": 3, "question": "I sell vegetables on a cart. Can I get a working capital loan without collateral?", "answerable": true},
+  {"id": 4, "question": "What benefits does PM Vishwakarma provide to traditional artisans?", "answerable": true},
+  {"id": 5, "question": "Who is eligible for rural housing assistance under PMAY-G?", "answerable": true},
+  {"id": 6, "question": "What is the current application deadline for PM-KISAN?", "answerable": false},
+  {"id": 7, "question": "Can a farmer who pays income tax receive PM-KISAN benefits?", "answerable": true},
+  {"id": 8, "question": "What is the annual financial benefit provided under PM-KISAN?", "answerable": true},
+  {"id": 9, "question": "Who can apply for the DPIIT Internship Scheme?", "answerable": true},
+  {"id": 10, "question": "What is the next intake date for the DPIIT Internship Scheme?", "answerable": false}
+]
