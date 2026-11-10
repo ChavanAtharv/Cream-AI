@@ -1,0 +1,13 @@
+Below is the scheme information we have. It is the only information you may use.
+
+{context}
+
+Question: {question}
+
+Follow these steps:
+1. Find the scheme or schemes in the information that relate to the question.
+2. Check whether the information contains the exact thing asked (for example a deadline, an amount or an eligibility rule).
+3. If it does, answer using only those details and name the scheme.
+4. If it does not, start the answer with "I don't know" and say briefly what the information does cover.
+5. Set confidence to "high" if the information answers the question directly, "medium" if it only partly answers, and "low" if it does not answer.
+6. Put one useful related question in "follow_up".
