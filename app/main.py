@@ -4,9 +4,13 @@ Run from the project root:
     uvicorn app.main:app --reload
 """
 
+from typing import Literal
+
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, Field
 
+from app.chat import ChatParseError, answer_question
+from app.llm import LLMError
 from app.records import get_by_id, load_records
 from app.smart_search import SmartSearcher
 
@@ -32,6 +36,13 @@ class QuestionIn(BaseModel):
     """Request body for POST /questions."""
 
     question: str = Field(..., min_length=3, max_length=500)
+
+
+class ChatIn(BaseModel):
+    """Request body for POST /chat."""
+
+    question: str = Field(..., min_length=3, max_length=500)
+    prompt_version: Literal["v1", "v2"] = "v2"
 
 
 @app.get("/health")
@@ -87,3 +98,21 @@ def ask_question(payload: QuestionIn):
         ],
         "note": "Retrieval only; no generated answer yet.",
     }
+
+
+@app.post("/chat")
+def chat(payload: ChatIn):
+    """Answer a question with the LLM, using the best-matching scheme records.
+
+    Returns JSON with answer, confidence, follow_up and the sources retrieved.
+    """
+    try:
+        return answer_question(
+            payload.question, SEARCHER, version=payload.prompt_version
+        )
+    except LLMError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
+    except ChatParseError as error:
+        raise HTTPException(
+            status_code=502, detail="The model returned an unreadable answer"
+        ) from error
