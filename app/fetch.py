@@ -14,6 +14,7 @@ DOCUMENTS_DIR = PROJECT_ROOT / "data" / "documents"
 TIMEOUT_SECONDS = 15
 HEADERS = {"User-Agent": "SchemeSaathi/0.1 (student project)"}
 
+# Documents to download: name -> URL (TODO: add official guideline PDFs)
 DOCUMENTS = {
     "pm_kisan_myscheme": "https://www.myscheme.gov.in/schemes/pm-kisan",
     "pmjjby_myscheme": "https://www.myscheme.gov.in/schemes/pmjjby",
