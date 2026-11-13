@@ -1,0 +1,22 @@
+# Prompt comparison: v1 vs v2
+
+v1 gives the model the records and the question. v2 adds step-by-step instructions, including how to say "I don't know".
+
+| # | Question | Answerable | v1 | v2 |
+|---|---|---|---|---|
+| 1 | I'm 25 years old. Can I enrol in Atal Pension Yojana? | yes | (medium) You appear to meet the age requirement for Atal Pension Yojana (APY). However, you should confirm that you have a savings bank or post‑office account and that you are not an income‑tax payer for new enrolment. Please check the official source for full eligibility details. | (high) Yes, you appear to meet the age requirement for Atal Pension Yojana. Confirm on the official source. |
+| 2 | What insurance coverage does PMJJBY provide? | yes | (high) Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY) provides a life insurance cover of ₹2 lakh for death due to any cause, subject to scheme terms. | (high) Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY) provides a life insurance cover of ₹2 lakh for death due to any cause, subject to scheme terms. |
+| 3 | I sell vegetables on a cart. Can I get a working capital loan without collateral? | yes | (medium) You may be eligible for a collateral‑free working‑capital loan under the PM Street Vendor's AtmaNirbhar Nidhi (PM SVANidhi) scheme, as it is designed for street vendors like you. Please confirm your eligibility and required documents on the official scheme website. | (high) Yes, under the PM Street Vendor's AtmaNirbhar Nidhi (PM SVANidhi) you can get a collateral‑free working‑capital loan if you are a street vendor identified by the Urban Local Body or holding the applicable vendor certificate, identity card or Letter of Recommendation. You should confirm your eligibility and application details on the official scheme portal. |
+| 4 | What benefits does PM Vishwakarma provide to traditional artisans? | yes | (high) PM Vishwakarma offers recognition, skill training, toolkit incentive, concessional collateral‑free enterprise loans and other support to traditional artisans. | (high) PM Vishwakarma provides recognition, skill training, toolkit incentive, concessional collateral‑free enterprise loans, and other support to traditional artisans. |
+| 5 | Who is eligible for rural housing assistance under PMAY-G? | yes | (high) Eligible rural houseless households and households in qualifying kutcha houses, as identified through beneficiary lists and verification. | (high) Under PMAY-G, eligible rural houseless households and households in qualifying kutcha houses are eligible for rural housing assistance. |
+| 6 | What is the current application deadline for PM-KISAN? | no | (low) I do not know the current application deadline for PM-KISAN. | (low) I don't know. The information covers the benefit amount and eligibility criteria for PM-KISAN. |
+| 7 | Can a farmer who pays income tax receive PM-KISAN benefits? | yes | (low) I do not know. | (low) I don't know. The information states that PM‑KISAN is for eligible landholding farmer families, but it does not mention whether paying income tax affects eligibility. |
+| 8 | What is the annual financial benefit provided under PM-KISAN? | yes | (high) The annual financial benefit under PM-KISAN is ₹6,000 per year, paid in three equal instalments via direct benefit transfer. | (high) Pradhan Mantri Kisan Samman Nidhi (PM-KISAN) provides ₹6,000 per year to eligible landholding farmer families. |
+| 9 | Who can apply for the DPIIT Internship Scheme? | yes | (high) Students in eligible undergraduate, postgraduate or research programmes and disciplines, subject to the current DPIIT notice. | (high) Students in eligible undergraduate, postgraduate or research programmes and disciplines, subject to the current DPIIT notice, can apply for the DPIIT Internship Scheme. |
+| 10 | What is the next intake date for the DPIIT Internship Scheme? | no | (low) I do not know the next intake date for the DPIIT Internship Scheme. | (low) I don't know. The information provided only lists the scheme name, ministry, benefit, eligibility, documents not specified, and source. |
+
+## What I noticed
+
+For Q6 and Q10, v1 and v2 (for example: both said they didn't know, or only one did). 
+Neither / One of the versions (for example: invented a date, added a detail that isn't in our records, or stayed within the records). 
+I'm keeping v because (for example: it followed the "I don't know" rule more clearly, or gave shorter, clearer answers).
