@@ -99,7 +99,7 @@ schemes = [
     {
         "id": "PMFBY", "scheme_name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
         "category": "Agriculture, Rural & Environment", "ministry": None, "benefit": None,
-        "eligibility": None, "documents": [], "source_url": "https://www.myscheme.gov.in/search",
+        "eligibility": None, "documents": [], "source_url": "https://www.myscheme.gov.in/schemes/pmfby",
         "verification_status": "candidate_details_and_central_filter_pending"
     },
     {
@@ -153,7 +153,7 @@ schemes = [
     {
         "id": "PM_KMY", "scheme_name": "Pradhan Mantri Kisan Maandhan Yojana (PM-KMY)",
         "category": "Agriculture, Rural & Environment", "ministry": None, "benefit": None,
-        "eligibility": None, "documents": [], "source_url": "https://www.myscheme.gov.in/search",
+        "eligibility": None, "documents": [], "source_url": "https://www.myscheme.gov.in/schemes/pmkmdy",
         "verification_status": "candidate_details_and_central_filter_pending"
     },
     {
