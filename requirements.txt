@@ -6,3 +6,6 @@ uvicorn
 httpx
 requests
 python-dotenv
+chromadb
+pypdf
+
