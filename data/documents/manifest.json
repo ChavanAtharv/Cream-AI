@@ -1,0 +1,17 @@
+{
+    "pm_kisan_operational_guidelines.pdf": {
+        "title": "PM-KISAN Operational Guidelines",
+        "source_url": "https://pmkisan.gov.in/Documents/RevisedPM-KISANOperationalGuidelines(English).pdf",
+        "scheme_id": "PM_KISAN"
+    },
+    "pm_kisan_faq.pdf": {
+        "title": "PM-KISAN FAQ",
+        "source_url": "https://fw.pmkisan.gov.in/Documents/FAQPMKISAN.pdf",
+        "scheme_id": "PM_KISAN"
+    },
+    "pm_kmy_operational_guidelines.pdf": {
+        "title": "PM-KMY Operational Guidelines",
+        "source_url": "https://pmkisan.gov.in/Documents/PM-KMY%20-%20Operational%20Guidelines.pdf",
+        "scheme_id": "PM_KMY"
+    }
+}
