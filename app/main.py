@@ -13,6 +13,8 @@ from app.chat import ChatParseError, answer_question
 from app.llm import LLMError
 from app.records import get_by_id, load_records
 from app.smart_search import SmartSearcher
+from app.vectorstore import is_indexed
+from app.vectorstore import search as semantic_search
 
 
 def _ensure_ids(records):
@@ -75,6 +77,21 @@ def search_records(
         raise HTTPException(status_code=422, detail="Query must not be blank")
     results = SEARCHER.search(q, top_k=limit)
     return [{"score": round(score, 4), "record": record} for record, score in results]
+
+
+@app.get("/search/semantic")
+def search_semantic(
+    q: str = Query(..., min_length=1), limit: int = Query(5, ge=1, le=20)
+):
+    """Find document chunks closest in meaning to the query."""
+    if not q.strip():
+        raise HTTPException(status_code=422, detail="Query must not be blank")
+    if not is_indexed():
+        raise HTTPException(
+            status_code=503,
+            detail="Index is empty. Run: python -m app.vectorstore",
+        )
+    return semantic_search(q, top_k=limit)
 
 
 @app.post("/questions")
