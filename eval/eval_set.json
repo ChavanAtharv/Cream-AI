@@ -1,0 +1,155 @@
+[
+  {
+    "id": 1,
+    "question": "I'm 25 years old. Can I enrol in Atal Pension Yojana?",
+    "answerable": true,
+    "expect_file_prefixes": [
+      "apy_"
+    ],
+    "must_mention_any": []
+  },
+  {
+    "id": 2,
+    "question": "What insurance coverage does PMJJBY provide?",
+    "answerable": true,
+    "expect_file_prefixes": [
+      "pmjjby_"
+    ],
+    "must_mention_any": [
+      "2 lakh",
+      "2,00,000",
+      "200000"
+    ]
+  },
+  {
+    "id": 3,
+    "question": "I sell vegetables on a cart. Can I get a working capital loan without collateral?",
+    "answerable": true,
+    "expect_file_prefixes": [
+      "pm_svanidhi_"
+    ],
+    "must_mention_any": [
+      "collateral"
+    ]
+  },
+  {
+    "id": 4,
+    "question": "What benefits does PM Vishwakarma provide to traditional artisans?",
+    "answerable": true,
+    "expect_file_prefixes": [
+      "pm_vishwakarma_"
+    ],
+    "must_mention_any": []
+  },
+  {
+    "id": 5,
+    "question": "Who is eligible for rural housing assistance under PMAY-G?",
+    "answerable": true,
+    "expect_file_prefixes": [
+      "pmayg_",
+      "pmay_g_"
+    ],
+    "must_mention_any": []
+  },
+  {
+    "id": 6,
+    "question": "What is the current application deadline for PM-KISAN?",
+    "answerable": false,
+    "expect_file_prefixes": [],
+    "must_mention_any": []
+  },
+  {
+    "id": 7,
+    "question": "Can a farmer who pays income tax receive PM-KISAN benefits?",
+    "answerable": true,
+    "expect_file_prefixes": [
+      "pm_kisan_"
+    ],
+    "must_mention_any": [
+      "income tax",
+      "income-tax"
+    ]
+  },
+  {
+    "id": 8,
+    "question": "What is the annual financial benefit provided under PM-KISAN?",
+    "answerable": true,
+    "expect_file_prefixes": [
+      "pm_kisan_"
+    ],
+    "must_mention_any": [
+      "6000",
+      "6,000"
+    ]
+  },
+  {
+    "id": 9,
+    "question": "Who can apply for the DPIIT Internship Scheme?",
+    "answerable": true,
+    "expect_file_prefixes": [
+      "dpiit_"
+    ],
+    "must_mention_any": []
+  },
+  {
+    "id": 10,
+    "question": "What is the next intake date for the DPIIT Internship Scheme?",
+    "answerable": true,
+    "expect_file_prefixes": [
+      "dpiit_"
+    ],
+    "must_mention_any": [
+      "March",
+      "September"
+    ]
+  },
+  {
+    "id": 11,
+    "question": "What monthly pension does PM-KMY provide?",
+    "answerable": true,
+    "expect_file_prefixes": [
+      "pm_kmy_"
+    ],
+    "must_mention_any": [
+      "3000",
+      "3,000"
+    ]
+  },
+  {
+    "id": 12,
+    "question": "At what age does the PM-KMY pension start?",
+    "answerable": true,
+    "expect_file_prefixes": [
+      "pm_kmy_"
+    ],
+    "must_mention_any": [
+      "60"
+    ]
+  },
+  {
+    "id": 13,
+    "question": "Can a government employee get PM-KISAN?",
+    "answerable": true,
+    "expect_file_prefixes": [
+      "pm_kisan_"
+    ],
+    "must_mention_any": [
+      "employee",
+      "government"
+    ]
+  },
+  {
+    "id": 14,
+    "question": "What is the current interest rate on PPF?",
+    "answerable": false,
+    "expect_file_prefixes": [],
+    "must_mention_any": []
+  },
+  {
+    "id": 15,
+    "question": "Which scheme gives free laptops to students?",
+    "answerable": false,
+    "expect_file_prefixes": [],
+    "must_mention_any": []
+  }
+]
