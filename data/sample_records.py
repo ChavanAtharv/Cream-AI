@@ -111,19 +111,19 @@ schemes = [
     {
         "id": "MUDRA", "scheme_name": "Pradhan Mantri MUDRA Yojana (PMMY)",
         "category": "Business & Entrepreneurship", "ministry": None, "benefit": None,
-        "eligibility": None, "documents": [], "source_url": "https://www.myscheme.gov.in/search",
+        "eligibility": None, "documents": [], "source_url": "https://www.myscheme.gov.in/schemes/pmmy",
         "verification_status": "candidate_details_and_central_filter_pending"
     },
     {
         "id": "PMUY", "scheme_name": "Pradhan Mantri Ujjwala Yojana (PMUY)",
         "category": "Utility & Sanitation", "ministry": None, "benefit": None,
-        "eligibility": None, "documents": [], "source_url": "https://www.myscheme.gov.in/search",
+        "eligibility": None, "documents": [], "source_url": "https://www.myscheme.gov.in/schemes/pmuy2",
         "verification_status": "candidate_details_and_central_filter_pending"
     },
     {
         "id": "PMJDY", "scheme_name": "Pradhan Mantri Jan Dhan Yojana (PMJDY)",
         "category": "Banking, Financial Services and Insurance", "ministry": None, "benefit": None,
-        "eligibility": None, "documents": [], "source_url": "https://www.myscheme.gov.in/search",
+        "eligibility": None, "documents": [], "source_url": "https://www.myscheme.gov.in/schemes/pmjdy",
         "verification_status": "candidate_details_and_central_filter_pending"
     },
     {
@@ -159,7 +159,7 @@ schemes = [
     {
         "id": "PMGSY", "scheme_name": "Pradhan Mantri Gram Sadak Yojana (PMGSY)",
         "category": "Agriculture, Rural & Environment", "ministry": None, "benefit": None,
-        "eligibility": None, "documents": [], "source_url": "https://www.myscheme.gov.in/search",
+        "eligibility": None, "documents": [], "source_url": "https://www.myscheme.gov.in/schemes/pmgsy",
         "verification_status": "candidate_details_and_central_filter_pending"
     },
 ]
