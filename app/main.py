@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 
 from app.chat import ChatParseError, answer_question
 from app.llm import LLMError
+from app.rag import answer_question as rag_answer
 from app.records import get_by_id, load_records
 from app.smart_search import SmartSearcher
 from app.vectorstore import is_indexed
@@ -45,6 +46,13 @@ class ChatIn(BaseModel):
 
     question: str = Field(..., min_length=3, max_length=500)
     prompt_version: Literal["v1", "v2"] = "v2"
+
+
+class AskIn(BaseModel):
+    """Request body for POST /ask."""
+
+    question: str = Field(..., min_length=3, max_length=500)
+    top_k: int = Field(4, ge=1, le=10)
 
 
 @app.get("/health")
@@ -127,6 +135,24 @@ def chat(payload: ChatIn):
         return answer_question(
             payload.question, SEARCHER, version=payload.prompt_version
         )
+    except LLMError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
+    except ChatParseError as error:
+        raise HTTPException(
+            status_code=502, detail="The model returned an unreadable answer"
+        ) from error
+
+
+@app.post("/ask")
+def ask(payload: AskIn):
+    """Answer from the indexed documents, with citations or "I don't know"."""
+    if not is_indexed():
+        raise HTTPException(
+            status_code=503,
+            detail="Index is empty. Run: python -m app.vectorstore",
+        )
+    try:
+        return rag_answer(payload.question, top_k=payload.top_k)
     except LLMError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
     except ChatParseError as error:
