@@ -91,7 +91,7 @@ def test_build_chunks_file_missing_from_manifest_gets_fallbacks(tmp_path):
 
 def test_build_chunks_uses_page_numbers_for_pdfs(tmp_path):
     (tmp_path / "guide.pdf").write_bytes(b"placeholder")
-    pages = [(1, _words(30)), (3, _words(30))]
+    pages = [(1, _words(30)), (3, "other " + _words(30))]
     with patch("app.chunking.read_pdf_pages", return_value=pages):
         chunks = build_chunks(tmp_path)
     assert [chunk["page"] for chunk in chunks] == [1, 3]
@@ -103,3 +103,10 @@ def test_build_chunks_skips_unreadable_pdf_and_other_files(tmp_path):
     (tmp_path / "ok.txt").write_text(_words(30))
     chunks = build_chunks(tmp_path)
     assert {chunk["file"] for chunk in chunks} == {"ok.txt"}
+
+
+def test_build_chunks_skips_duplicate_files(tmp_path):
+    (tmp_path / "guide.txt").write_text(_words(40))
+    (tmp_path / "guide copy.txt").write_text(_words(40))
+    chunks = build_chunks(tmp_path)
+    assert len(chunks) == 1

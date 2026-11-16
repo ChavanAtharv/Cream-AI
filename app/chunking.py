@@ -87,6 +87,8 @@ def build_chunks(
     documents_dir = Path(documents_dir)
     manifest = load_manifest(documents_dir / "manifest.json")
     chunks = []
+    seen_texts = set()
+    duplicates = 0
 
     for path in sorted(documents_dir.iterdir()):
         if path.suffix.lower() not in (".pdf", ".txt"):
@@ -106,6 +108,10 @@ def build_chunks(
 
         for page, text in parts:
             for index, piece in enumerate(chunk_text(text, size, overlap), start=1):
+                if piece in seen_texts:
+                    duplicates += 1
+                    continue
+                seen_texts.add(piece)
                 chunks.append(
                     {
                         "id": f"{path.stem}-p{page}-c{index}",
@@ -117,6 +123,8 @@ def build_chunks(
                         "scheme_id": info.get("scheme_id") or "",
                     }
                 )
+    if duplicates:
+        print(f"Warning: skipped {duplicates} duplicate chunks (a file copied twice?)")
     return chunks
 
 
