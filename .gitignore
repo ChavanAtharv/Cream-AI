@@ -6,3 +6,4 @@ __pycache__/
 .env
 temp/
 data/chroma/
+data/chroma_eval/
