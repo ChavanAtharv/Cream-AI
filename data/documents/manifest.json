@@ -13,5 +13,35 @@
         "title": "PM-KMY Operational Guidelines",
         "source_url": "https://pmkisan.gov.in/Documents/PM-KMY%20-%20Operational%20Guidelines.pdf",
         "scheme_id": "PM_KMY"
+    },
+    "apy_guidelines.pdf": {
+    "title": "Atal Pension Yojana Guidelines",
+    "source_url": "<https://www.myscheme.gov.in/schemes/apy>",
+    "scheme_id": "<APY>"
+    },
+    "dpiit_guidelines.pdf": {
+    "title": "DPIIT Internship Scheme Guidelines",
+    "source_url": "<https://www.myscheme.gov.in/schemes/dpiit-is>",
+    "scheme_id": "<DPIIT_INTERNSHIP>"
+    },
+    "pm_svanidhi_guidelines.pdf": {
+    "title": "PM-SVANIDHI Guidelines",
+    "source_url": "<https://www.myscheme.gov.in/schemes/pm-svanidhi>",
+    "scheme_id": "<PM_SVANIDHI>"
+    },
+    "pm_vishwakarma_myscheme_tabs.pdf": {
+    "title": "PM-VISHWAKARMA Guidelines",
+    "source_url": "<https://www.myscheme.gov.in/schemes/pm-vishwakarma>",
+    "scheme_id": "<PM_VISHWAKARMA>"
+    },
+    "pmayg_myscheme_tabs.pdf": {
+    "title": "PMAYG Guidelines",
+    "source_url": "<https://www.myscheme.gov.in/schemes/pmay-g>",
+    "scheme_id": "<PMAY_G>"
+    },
+    "pmjjby_guidelines.pdf": {
+    "title": "PMJJBY Guidelines",
+    "source_url": "<https://www.myscheme.gov.in/schemes/pmjjby>",
+    "scheme_id": "<PMJJBY>"
     }
 }
