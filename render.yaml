@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: schemesaathi-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerCommand: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: LLM_PROVIDER
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-20b
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+
+  - type: web
+    name: schemesaathi-ui
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerCommand: streamlit run ui/app.py --server.port 8501 --server.address 0.0.0.0
+    plan: free
+    envVars:
+      - key: API_URL
+        fromService:
+          type: web
+          name: schemesaathi-api
+          property: host

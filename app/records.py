@@ -1,6 +1,7 @@
 """Reusable functions for SchemeSaathi scheme records."""
 
 from copy import deepcopy
+
 from data.sample_records import schemes as DEFAULT_RECORDS
 
 

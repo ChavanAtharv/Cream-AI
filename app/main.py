@@ -4,12 +4,15 @@ Run from the project root:
     uvicorn app.main:app --reload
 """
 
+import logging
+import time
 import uuid
 from typing import Literal, Optional
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 
+from app.cache import CACHE
 from app.chat import ChatParseError, answer_question
 from app.llm import LLMError
 from app.rag import answer_question as rag_answer
@@ -17,6 +20,8 @@ from app.records import get_by_id, load_records
 from app.smart_search import SmartSearcher
 from app.vectorstore import is_indexed
 from app.vectorstore import search as semantic_search
+
+logger = logging.getLogger("schemesaathi.api")
 
 
 def _ensure_ids(records):
@@ -34,6 +39,23 @@ app = FastAPI(
     description="Discover Indian Central Government schemes.",
     version="0.1.0",
 )
+
+
+@app.middleware("http")
+async def measure_request_latency(request: Request, call_next):
+    """Measure request latency and record it in response header and server logs."""
+    start = time.perf_counter()
+    response = await call_next(request)
+    duration_ms = (time.perf_counter() - start) * 1000
+    response.headers["X-Process-Time-Ms"] = f"{duration_ms:.2f}"
+    logger.info(
+        "[LATENCY] %s %s - status=%s duration_ms=%.2f",
+        request.method,
+        request.url.path,
+        response.status_code,
+        duration_ms,
+    )
+    return response
 
 
 class QuestionIn(BaseModel):
@@ -86,15 +108,30 @@ def read_record(record_id: str):
     return record
 
 
+@app.get("/cache/stats")
+def get_cache_stats():
+    """Return metrics on query cache hits, misses, and hit rate."""
+    return CACHE.stats()
+
+
 @app.get("/search")
 def search_records(
-    q: str = Query(..., min_length=1), limit: int = Query(5, ge=1, le=20)
+    q: str = Query(..., min_length=1, max_length=500), limit: int = Query(5, ge=1, le=20)
 ):
     """Rank records against the query using TF-IDF and cosine similarity."""
-    if not q.strip():
+    cleaned = q.strip()
+    if not cleaned:
         raise HTTPException(status_code=422, detail="Query must not be blank")
-    results = SEARCHER.search(q, top_k=limit)
-    return [{"score": round(score, 4), "record": record} for record, score in results]
+
+    cache_key = f"{cleaned}:limit={limit}"
+    cached = CACHE.get("search", cache_key)
+    if cached is not None:
+        return cached
+
+    results = SEARCHER.search(cleaned, top_k=limit)
+    formatted = [{"score": round(score, 4), "record": record} for record, score in results]
+    CACHE.set("search", cache_key, formatted)
+    return formatted
 
 
 @app.get("/search/semantic")
@@ -161,8 +198,17 @@ def ask(payload: AskIn):
             status_code=503,
             detail="Index is empty. Run: python -m app.vectorstore",
         )
+
+    cache_key = f"{payload.question}:top_k={payload.top_k}"
+    cached = CACHE.get("rag", cache_key)
+    if cached is not None:
+        return cached
+
     try:
-        return rag_answer(payload.question, top_k=payload.top_k)
+        res = rag_answer(payload.question, top_k=payload.top_k)
+        if res.get("answerable"):
+            CACHE.set("rag", cache_key, res)
+        return res
     except LLMError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
     except ChatParseError as error:

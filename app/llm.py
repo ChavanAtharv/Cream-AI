@@ -6,9 +6,12 @@ Settings come from environment variables (see .env.example):
     GEMINI_API_KEY / GEMINI_MODEL
 """
 
+import logging
 import os
 
 import requests
+
+logger = logging.getLogger("schemesaathi.llm")
 
 try:  # load a local .env file if python-dotenv is installed
     from dotenv import load_dotenv
@@ -78,6 +81,15 @@ def _groq(system_prompt, user_prompt, temperature):
             ],
         },
     )
+    usage = data.get("usage")
+    if usage and isinstance(usage, dict):
+        logger.info(
+            "[TOKEN_USAGE] provider=groq model=%s prompt_tokens=%s completion_tokens=%s total_tokens=%s",
+            os.getenv("GROQ_MODEL", "unknown"),
+            usage.get("prompt_tokens"),
+            usage.get("completion_tokens"),
+            usage.get("total_tokens"),
+        )
     return data["choices"][0]["message"]["content"]
 
 
@@ -92,6 +104,15 @@ def _gemini(system_prompt, user_prompt, temperature):
             "generationConfig": {"temperature": temperature},
         },
     )
+    usage = data.get("usageMetadata")
+    if usage and isinstance(usage, dict):
+        logger.info(
+            "[TOKEN_USAGE] provider=gemini model=%s prompt_tokens=%s completion_tokens=%s total_tokens=%s",
+            model,
+            usage.get("promptTokenCount"),
+            usage.get("candidatesTokenCount"),
+            usage.get("totalTokenCount"),
+        )
     return data["candidates"][0]["content"]["parts"][0]["text"]
 
 
