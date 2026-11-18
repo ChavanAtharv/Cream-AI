@@ -159,6 +159,30 @@ Keep changes focused, use clear commit messages, write tests where appropriate, 
 
 SchemeSaathi is intended to help people understand available schemes and where to find official information. It does not replace advice or decisions from the government department responsible for a scheme.
 
+## Run with Docker
+
+Run both the FastAPI backend and Streamlit UI with a single command:
+
+```bash
+docker compose up --build
+```
+
+- **FastAPI API & Docs**: http://localhost:8000/docs
+- **API Health Check**: http://localhost:8000/health
+- **Streamlit Web UI**: http://localhost:8501
+
+To run in the background (detached mode):
+
+```bash
+docker compose up -d
+```
+
+To stop all services:
+
+```bash
+docker compose down
+```
+
 ## How to run
 
 ```bash
