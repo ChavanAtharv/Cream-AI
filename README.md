@@ -1,5 +1,7 @@
 # SchemeSaathi
 
+[![CI](https://github.com/ChavanAtharv/Cream-AI/actions/workflows/ci.yml/badge.svg)](https://github.com/ChavanAtharv/Cream-AI/actions/workflows/ci.yml)
+
 Finding the right government scheme can be confusing. Information is spread across different websites, eligibility rules are not always easy to understand, and people may not know where to begin.
 
 **SchemeSaathi** is being developed to make that process simpler. The idea is to give people one place to explore government schemes, understand who they are meant for, and learn what steps they may need to take next.
@@ -182,6 +184,20 @@ To stop all services:
 ```bash
 docker compose down
 ```
+
+## Deployment
+
+SchemeSaathi is configured for automated cloud deployment via [Render](https://render.com) using Infrastructure-as-Code (`render.yaml`):
+
+- **FastAPI Backend Service**: `https://schemesaathi-api.onrender.com`
+- **Streamlit Frontend Service**: `https://schemesaathi.onrender.com`
+- **Public Health Check**: `https://schemesaathi-api.onrender.com/health`
+
+### Deploy with Render
+1. Connect this repository to your Render account.
+2. Select **New +** > **Blueprint** and point to `render.yaml`.
+3. Set your secret environment variable: `GROQ_API_KEY` (and optionally `GEMINI_API_KEY`).
+4. Both the API and UI services will automatically build and deploy with live inter-service communication.
 
 ## How to run
 
