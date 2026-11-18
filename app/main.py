@@ -4,7 +4,8 @@ Run from the project root:
     uvicorn app.main:app --reload
 """
 
-from typing import Literal
+import uuid
+from typing import Literal, Optional
 
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, Field
@@ -53,6 +54,15 @@ class AskIn(BaseModel):
 
     question: str = Field(..., min_length=3, max_length=500)
     top_k: int = Field(4, ge=1, le=10)
+
+
+class AgentIn(BaseModel):
+    """Request body for POST /agent: a new question, or an approval decision."""
+
+    question: Optional[str] = Field(None, min_length=3, max_length=500)
+    thread_id: Optional[str] = Field(None, min_length=1, max_length=100)
+    approve: Optional[bool] = None
+    auto_approve: bool = False
 
 
 @app.get("/health")
@@ -153,6 +163,55 @@ def ask(payload: AskIn):
         )
     try:
         return rag_answer(payload.question, top_k=payload.top_k)
+    except LLMError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
+    except ChatParseError as error:
+        raise HTTPException(
+            status_code=502, detail="The model returned an unreadable answer"
+        ) from error
+
+
+@app.post("/agent")
+def agent(payload: AgentIn):
+    """Run the agent. It may pause and ask for approval before using a tool.
+
+    Send {"question": ...} to start a turn (optionally with a thread_id to
+    continue a conversation). If the reply says awaiting_approval, send
+    {"thread_id": ..., "approve": true or false} to continue.
+    """
+    if (payload.question is None) == (payload.approve is None):
+        raise HTTPException(
+            status_code=422, detail="Send either a question or an approve decision"
+        )
+    if payload.question is None and not payload.thread_id:
+        raise HTTPException(status_code=422, detail="approve needs a thread_id")
+    thread_id = payload.thread_id or uuid.uuid4().hex
+
+    from app import graph as agent_graph
+
+    try:
+        graph = agent_graph.get_graph()
+        pending = agent_graph.has_pending(graph, thread_id)
+        if payload.question is not None and pending:
+            raise HTTPException(
+                status_code=409,
+                detail="This thread is waiting for an approval decision",
+            )
+        if payload.approve is not None and not pending:
+            raise HTTPException(
+                status_code=409, detail="This thread has nothing waiting for approval"
+            )
+        return agent_graph.run_turn(
+            graph,
+            thread_id,
+            question=payload.question,
+            approve=payload.approve,
+            auto_approve=payload.auto_approve,
+        )
+    except ImportError as error:
+        raise HTTPException(
+            status_code=503, detail="langgraph is not installed"
+        ) from error
     except LLMError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
     except ChatParseError as error:
