@@ -10,7 +10,6 @@ from app.fetch import FetchError, download_all, extension_for, fetch_document
 from app.ingest import clean_record, ingest
 from app.models import Record
 
-
 # ---- Record --------------------------------------------------------------
 
 def test_record_from_dict_ignores_unknown_keys():

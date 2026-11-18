@@ -8,5 +8,6 @@ requests
 python-dotenv
 chromadb
 pypdf
-
 langgraph
+streamlit
+ruff
