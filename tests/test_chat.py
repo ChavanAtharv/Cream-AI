@@ -169,3 +169,70 @@ def test_timeout_becomes_llm_error():
     ):
         with pytest.raises(llm.LLMError):
             llm.complete("s", "u")
+
+
+def test_http_error_includes_the_providers_reason_but_not_the_key():
+    env = {"LLM_PROVIDER": "groq", "GROQ_API_KEY": "secret-key", "GROQ_MODEL": "m"}
+    response = MagicMock(status_code=400)
+    response.json.return_value = {"error": {"message": "model not available"}}
+    response.raise_for_status.side_effect = requests.exceptions.HTTPError(response=response)
+    with patch.dict(os.environ, env), patch("app.llm.requests.post", return_value=response):
+        with pytest.raises(llm.LLMError) as info:
+            llm.complete("s", "u")
+    assert "HTTP 400" in str(info.value)
+    assert "model not available" in str(info.value)
+    assert "secret-key" not in str(info.value)
+
+
+def test_http_error_without_a_readable_body_still_reports_the_status():
+    env = {"LLM_PROVIDER": "groq", "GROQ_API_KEY": "k", "GROQ_MODEL": "m"}
+    response = MagicMock(status_code=500)
+    response.json.side_effect = ValueError("not json")
+    response.raise_for_status.side_effect = requests.exceptions.HTTPError(response=response)
+    with patch.dict(os.environ, env), patch("app.llm.requests.post", return_value=response):
+        with pytest.raises(llm.LLMError) as info:
+            llm.complete("s", "u")
+    assert str(info.value) == "The LLM provider returned HTTP 500"
+
+
+TOOL_ERROR = "The LLM provider returned HTTP 400: Tool choice is none, but model called a tool"
+
+
+def test_complete_retries_when_the_model_tries_to_call_a_tool():
+    calls = []
+
+    def flaky(system, user, temperature):
+        calls.append(1)
+        if len(calls) < 3:
+            raise llm.LLMError(TOOL_ERROR)
+        return "fine"
+
+    with patch.dict(os.environ, {"LLM_PROVIDER": "groq"}), patch.dict(llm.PROVIDERS, {"groq": flaky}):
+        assert llm.complete("s", "u") == "fine"
+    assert len(calls) == 3
+
+
+def test_complete_gives_up_after_three_tool_call_errors():
+    calls = []
+
+    def always(system, user, temperature):
+        calls.append(1)
+        raise llm.LLMError(TOOL_ERROR)
+
+    with patch.dict(os.environ, {"LLM_PROVIDER": "groq"}), patch.dict(llm.PROVIDERS, {"groq": always}):
+        with pytest.raises(llm.LLMError):
+            llm.complete("s", "u")
+    assert len(calls) == 3
+
+
+def test_complete_does_not_retry_other_errors():
+    calls = []
+
+    def bad_key(system, user, temperature):
+        calls.append(1)
+        raise llm.LLMError("The LLM provider returned HTTP 401")
+
+    with patch.dict(os.environ, {"LLM_PROVIDER": "groq"}), patch.dict(llm.PROVIDERS, {"groq": bad_key}):
+        with pytest.raises(llm.LLMError):
+            llm.complete("s", "u")
+    assert len(calls) == 1

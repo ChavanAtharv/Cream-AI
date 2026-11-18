@@ -18,6 +18,10 @@ except ImportError:
     pass
 
 TIMEOUT_SECONDS = 30
+# gpt-oss models on Groq sometimes try to call a tool that does not exist;
+# the request fails with this message and usually works if sent again.
+TOOL_CALL_ERROR = "Tool choice is none"
+ATTEMPTS = 3
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 GEMINI_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
@@ -50,7 +54,13 @@ def _post(url, headers, payload):
         raise LLMError("The LLM provider timed out") from error
     except requests.exceptions.HTTPError as error:
         status = error.response.status_code if error.response is not None else "?"
-        raise LLMError(f"The LLM provider returned HTTP {status}") from error
+        message = f"The LLM provider returned HTTP {status}"
+        try:  # the provider usually explains what was wrong
+            reason = str(error.response.json()["error"]["message"])[:200]
+            message += f": {reason}"
+        except (AttributeError, KeyError, TypeError, ValueError):
+            pass
+        raise LLMError(message) from error
     except (requests.exceptions.RequestException, ValueError) as error:
         raise LLMError("Could not reach the LLM provider") from error
 
@@ -93,7 +103,12 @@ def complete(system_prompt, user_prompt, temperature=0.2):
     provider = os.getenv("LLM_PROVIDER", "groq").strip().lower()
     if provider not in PROVIDERS:
         raise LLMError(f"Unknown LLM_PROVIDER '{provider}'. Use groq or gemini.")
-    try:
-        return PROVIDERS[provider](system_prompt, user_prompt, temperature)
-    except (KeyError, IndexError, TypeError) as error:
-        raise LLMError("Unexpected reply format from the LLM provider") from error
+    for attempt in range(ATTEMPTS):
+        try:
+            return PROVIDERS[provider](system_prompt, user_prompt, temperature)
+        except (KeyError, IndexError, TypeError) as error:
+            raise LLMError("Unexpected reply format from the LLM provider") from error
+        except LLMError as error:
+            if TOOL_CALL_ERROR in str(error) and attempt < ATTEMPTS - 1:
+                continue
+            raise
