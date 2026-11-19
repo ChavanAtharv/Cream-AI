@@ -322,9 +322,9 @@ SchemeSaathi is configured for automated cloud deployment on **Render**:
   - `GROQ_API_KEY`: Groq Cloud API access token.
   - `LLM_PROVIDER`: Set to `groq`.
 
-### Live Deployment URL
-- **Production Web Application**: `https://schemesaathi.onrender.com` *(or Hugging Face Space)*
-- **API Health Check**: `https://schemesaathi-api.onrender.com/health`
+### Live Deployment URLs
+- **Production Web Application**: [https://schemesaathi-ui.onrender.com](https://schemesaathi-ui.onrender.com)
+- **API Health Check**: [https://schemesaathi-api-tqtz.onrender.com/health](https://schemesaathi-api-tqtz.onrender.com/health)
 
 *(Note: Provide repository and cloud credentials in Render / Hugging Face dashboard to bind the live instance).*
 

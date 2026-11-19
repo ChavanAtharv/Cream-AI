@@ -21,6 +21,9 @@ COPY ui/ ui/
 COPY pyproject.toml .
 COPY README.md .
 
+# Pre-build vectorstore index
+RUN python -m app.vectorstore
+
 # Expose ports for FastAPI (8000) and Streamlit (8501)
 EXPOSE 8000 8501
 

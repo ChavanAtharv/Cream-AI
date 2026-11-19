@@ -19,7 +19,22 @@ import streamlit as st
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RECORDS_FILE = PROJECT_ROOT / "data" / "records.json"
 FEEDBACK_FILE = PROJECT_ROOT / "data" / "feedback.json"
-API_BASE_URL = os.getenv("API_URL", "http://127.0.0.1:8000").rstrip("/")
+
+
+def _get_api_base_url() -> str:
+    """Normalize API_URL to handle local, Docker, and Render service hostnames."""
+    raw = os.getenv("API_URL", "http://127.0.0.1:8000").strip().rstrip("/")
+    if not raw.startswith(("http://", "https://")):
+        if "onrender.com" in raw:
+            return f"https://{raw}"
+        if any(h in raw for h in ("localhost", "127.0.0.1", "0.0.0.0", "api:")) or ":" in raw:
+            return f"http://{raw}"
+        # On Render, free services without protocol map to https://<host>.onrender.com
+        return f"https://{raw}.onrender.com"
+    return raw
+
+
+API_BASE_URL = _get_api_base_url()
 
 st.set_page_config(
     page_title="SchemeSaathi — Government Scheme Discovery",
@@ -168,8 +183,14 @@ with tab_match:
             "Age Band",
             ["All Ages", "18-40 (Youth/Working)", "18-50 (Adult)", "60+ (Senior)", "Youth/Students"],
             index=0,
+            key="chip_age",
         )
-        gender = st.selectbox("Gender", ["All Genders", "Female", "Male", "Transgender"], index=0)
+        gender = st.selectbox(
+            "Gender",
+            ["All Genders", "Female", "Male", "Transgender"],
+            index=0,
+            key="chip_gender",
+        )
     with c2:
         occupation = st.selectbox(
             "Occupation",
@@ -182,19 +203,27 @@ with tab_match:
                 "Unorganized / Self-Employed",
             ],
             index=0,
+            key="chip_occupation",
         )
         income_band = st.selectbox(
             "Income Band",
             ["All Incomes", "Non-Taxpayer / Low Income", "Income Taxpayer"],
             index=0,
+            key="chip_income",
         )
     with c3:
         category = st.selectbox(
             "Category",
             ["All Categories", "General", "OBC", "SC", "ST", "Minority"],
             index=0,
+            key="chip_category",
         )
-        area = st.selectbox("Area / Residence", ["All Areas", "Rural", "Urban"], index=0)
+        area = st.selectbox(
+            "Area / Residence",
+            ["All Areas", "Rural", "Urban"],
+            index=0,
+            key="chip_area",
+        )
 
     # Filter records live
     matched_schemes = []
@@ -209,11 +238,13 @@ with tab_match:
     else:
         for rec, why in matched_schemes:
             with st.container(border=True):
-                col_title, col_id = st.columns([4, 1])
+                col_title, col_cat = st.columns([3, 1])
                 with col_title:
                     st.markdown(f"#### {rec.get('scheme_name')}")
-                with col_id:
-                    st.caption(f"ID: `{rec.get('id', 'N/A')}`")
+                with col_cat:
+                    cat_val = rec.get("category")
+                    if cat_val:
+                        st.caption(f"🏷️ {cat_val}")
 
                 st.markdown(f"**Ministry:** {rec.get('ministry') or 'Not specified'}")
                 st.markdown(f"**Benefit:** {rec.get('benefit') or 'Not specified'}")
@@ -234,6 +265,7 @@ with tab_chat:
         "Response Mode",
         ["RAG Search (/ask)", "Autonomous Agent (/agent)"],
         horizontal=True,
+        key="chat_mode_radio",
     )
 
     if "chat_history" not in st.session_state:
@@ -404,9 +436,10 @@ with tab_compare:
         options=scheme_names_list,
         default=scheme_names_list[:2] if len(scheme_names_list) >= 2 else [],
         max_selections=4,
+        key="comparator_schemes_multiselect",
     )
 
-    if st.button("Compare Schemes"):
+    if st.button("Compare Schemes", key="comparator_execute_btn"):
         if len(selected_schemes) < 2:
             st.warning("Please select at least 2 schemes to compare.")
         else:
