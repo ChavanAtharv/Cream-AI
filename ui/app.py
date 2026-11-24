@@ -49,6 +49,36 @@ def _get_api_base_url() -> str:
 
 API_BASE_URL = _get_api_base_url()
 
+REQUEST_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36 SchemeSaathi-UI/1.0"
+    ),
+    "Accept": "application/json",
+}
+
+
+def _format_api_error(status_code: int, raw_text: str) -> str:
+    """Format API error, replacing raw Cloudflare/Render HTML with user-friendly guidance."""
+    text_lower = (raw_text or "").lower()
+    if "<!doctype html" in text_lower or "<html" in text_lower:
+        if status_code == 429:
+            return (
+                "Backend service is temporarily rate-limited or waking up from sleep. "
+                "Please wait 10–15 seconds and try again."
+            )
+        if status_code in (502, 503, 504):
+            return (
+                f"Backend service is waking up (HTTP {status_code}). "
+                "Please wait a few seconds and retry."
+            )
+        return f"Backend returned HTTP {status_code}. The container may still be initializing."
+    clean = (raw_text or "").strip()
+    if len(clean) > 300:
+        clean = clean[:300] + "..."
+    return f"API error ({status_code}): {clean}"
+
 
 def make_api_request(
     endpoint: str, method: str = "POST", json_payload: dict = None, timeout: int = 35
@@ -57,6 +87,7 @@ def make_api_request(
     candidates = [
         API_BASE_URL,
         "https://schemesaathi-api-tqtz.onrender.com",
+        "http://schemesaathi-api:8000",
         "http://127.0.0.1:8000",
         "http://localhost:8000",
     ]
@@ -73,8 +104,29 @@ def make_api_request(
         target = f"{base}/{endpoint.lstrip('/')}"
         try:
             if method.upper() == "POST":
-                return requests.post(target, json=json_payload, timeout=timeout)
-            return requests.get(target, timeout=timeout)
+                resp = requests.post(
+                    target,
+                    json=json_payload,
+                    headers=REQUEST_HEADERS,
+                    timeout=timeout,
+                )
+            else:
+                resp = requests.get(
+                    target,
+                    headers=REQUEST_HEADERS,
+                    timeout=timeout,
+                )
+            # If a candidate returns a Cloudflare HTML challenge or gateway error, try next candidate
+            is_html = (
+                "<!doctype html" in resp.text[:100].lower()
+                or "<html" in resp.text[:100].lower()
+            )
+            if resp.status_code in (429, 502, 503, 504) and is_html:
+                last_error = RuntimeError(
+                    f"{base} returned HTTP {resp.status_code} HTML challenge"
+                )
+                continue
+            return resp
         except Exception as e:
             last_error = e
             continue
@@ -416,7 +468,7 @@ with tab_chat:
                                 }
                             )
                         else:
-                            err_msg = f"API error ({resp.status_code}): {resp.text}"
+                            err_msg = _format_api_error(resp.status_code, resp.text)
                             st.error(err_msg)
                             st.session_state.chat_history.append(
                                 {"role": "assistant", "content": err_msg, "citations": []}
@@ -444,7 +496,7 @@ with tab_chat:
                                     }
                                 )
                         else:
-                            err_msg = f"Agent API error ({resp.status_code}): {resp.text}"
+                            err_msg = _format_api_error(resp.status_code, resp.text)
                             st.error(err_msg)
                             st.session_state.chat_history.append(
                                 {"role": "assistant", "content": err_msg, "citations": []}
