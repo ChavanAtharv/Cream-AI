@@ -26,7 +26,4 @@ services:
     plan: free
     envVars:
       - key: API_URL
-        fromService:
-          type: web
-          name: schemesaathi-api
-          property: host
+        value: https://schemesaathi-api-tqtz.onrender.com

@@ -36,6 +36,38 @@ def _get_api_base_url() -> str:
 
 API_BASE_URL = _get_api_base_url()
 
+
+def make_api_request(
+    endpoint: str, method: str = "POST", json_payload: dict = None, timeout: int = 35
+):
+    """Attempt request against primary API_BASE_URL and candidate fallbacks."""
+    candidates = [
+        API_BASE_URL,
+        "https://schemesaathi-api-tqtz.onrender.com",
+        "http://127.0.0.1:8000",
+        "http://localhost:8000",
+    ]
+    seen = set()
+    unique_urls = []
+    for u in candidates:
+        clean = (u or "").strip().rstrip("/")
+        if clean and clean not in seen:
+            seen.add(clean)
+            unique_urls.append(clean)
+
+    last_error = None
+    for base in unique_urls:
+        target = f"{base}/{endpoint.lstrip('/')}"
+        try:
+            if method.upper() == "POST":
+                return requests.post(target, json=json_payload, timeout=timeout)
+            return requests.get(target, timeout=timeout)
+        except Exception as e:
+            last_error = e
+            continue
+    raise last_error or RuntimeError(f"Could not reach {endpoint}")
+
+
 st.set_page_config(
     page_title="SchemeSaathi — Government Scheme Discovery",
     page_icon="🇮🇳",
@@ -47,7 +79,7 @@ st.set_page_config(
 def load_all_records():
     """Load records from API if available, else from local JSON."""
     try:
-        response = requests.get(f"{API_BASE_URL}/records?limit=100", timeout=3)
+        response = make_api_request("records?limit=100", method="GET", timeout=5)
         if response.status_code == 200:
             return response.json()
     except Exception:
@@ -298,9 +330,10 @@ with tab_chat:
             c_app, c_rej = st.columns(2)
             if c_app.button("✅ Approve Tool Execution", use_container_width=True):
                 try:
-                    res = requests.post(
-                        f"{API_BASE_URL}/agent",
-                        json={
+                    res = make_api_request(
+                        "agent",
+                        method="POST",
+                        json_payload={
                             "thread_id": st.session_state.agent_thread_id,
                             "approve": True,
                         },
@@ -316,9 +349,10 @@ with tab_chat:
                     st.error(f"Error resuming agent: {e}")
             if c_rej.button("❌ Reject Tool Execution", use_container_width=True):
                 try:
-                    res = requests.post(
-                        f"{API_BASE_URL}/agent",
-                        json={
+                    res = make_api_request(
+                        "agent",
+                        method="POST",
+                        json_payload={
                             "thread_id": st.session_state.agent_thread_id,
                             "approve": False,
                         },
@@ -344,10 +378,11 @@ with tab_chat:
             with st.spinner("Consulting SchemeSaathi knowledge base..."):
                 try:
                     if "RAG" in mode:
-                        resp = requests.post(
-                            f"{API_BASE_URL}/ask",
-                            json={"question": user_query, "top_k": 4},
-                            timeout=30,
+                        resp = make_api_request(
+                            "ask",
+                            method="POST",
+                            json_payload={"question": user_query, "top_k": 4},
+                            timeout=35,
                         )
                         if resp.status_code == 200:
                             data = resp.json()
@@ -377,7 +412,7 @@ with tab_chat:
                         payload = {"question": user_query, "auto_approve": False}
                         if st.session_state.agent_thread_id:
                             payload["thread_id"] = st.session_state.agent_thread_id
-                        resp = requests.post(f"{API_BASE_URL}/agent", json=payload, timeout=30)
+                        resp = make_api_request("agent", method="POST", json_payload=payload, timeout=35)
                         if resp.status_code == 200:
                             data = resp.json()
                             st.session_state.agent_thread_id = data.get("thread_id")
