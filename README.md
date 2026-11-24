@@ -67,7 +67,7 @@ SchemeSaathi operates on three complementary tiers:
 
 - **Backend API**: FastAPI, Uvicorn, Pydantic v2
 - **Frontend UI**: Streamlit 1.40+
-- **LLM & Agent Framework**: LangChain, LangGraph, Groq SDK (`llama-3.3-70b-versatile`), Google Generative AI (`gemini-1.5-flash`)
+- **LLM & Agent Framework**: LangChain, LangGraph, Groq SDK (`llama-3.1-8b-instant`), Google Generative AI (`gemini-1.5-flash`)
 - **Vector Database & Embeddings**: ChromaDB, Sentence-Transformers (`all-MiniLM-L6-v2`)
 - **Data Ingestion & PDF Processing**: PyPDF, Pandas, Scikit-learn
 - **Code Quality & Testing**: Pytest (151+ tests), Ruff linter/formatter
@@ -280,7 +280,7 @@ Every API response includes the `X-Process-Time-Ms` header indicating server-sid
 
 ### 2. Token Usage Logging
 LLM generation requests automatically log token usage metadata without exposing user inputs, API keys, or raw system prompts:
-- **Groq Provider** (`llama-3.3-70b-versatile`):
+- **Groq Provider** (`llama-3.1-8b-instant` / fallback models):
   - Average Prompt Tokens: **348 tokens**
   - Average Completion Tokens: **82 tokens**
   - Total per RAG query: **~430 tokens**

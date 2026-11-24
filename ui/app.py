@@ -10,6 +10,7 @@ Features:
 
 import json
 import os
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -17,6 +18,18 @@ import requests
 import streamlit as st
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+# Ensure project root is first in sys.path
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+# Remove ui directory from sys.path so 'import app' resolves to the project's 'app' package
+ui_dir = str(Path(__file__).resolve().parent)
+while ui_dir in sys.path:
+    sys.path.remove(ui_dir)
+
+from app.tools import compare_schemes  # noqa: E402
+
 RECORDS_FILE = PROJECT_ROOT / "data" / "records.json"
 FEEDBACK_FILE = PROJECT_ROOT / "data" / "feedback.json"
 
@@ -479,7 +492,6 @@ with tab_compare:
             st.warning("Please select at least 2 schemes to compare.")
         else:
             try:
-                from app.tools import compare_schemes
                 table_md = compare_schemes(selected_schemes, records=records)
                 st.markdown(table_md)
             except Exception as e:

@@ -69,28 +69,54 @@ def _post(url, headers, payload):
 
 
 def _groq(system_prompt, user_prompt, temperature):
-    data = _post(
-        GROQ_URL,
-        {"Authorization": f"Bearer {_require_env('GROQ_API_KEY')}"},
-        {
-            "model": _require_env("GROQ_MODEL"),
-            "temperature": temperature,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-        },
-    )
-    usage = data.get("usage")
-    if usage and isinstance(usage, dict):
-        logger.info(
-            "[TOKEN_USAGE] provider=groq model=%s prompt_tokens=%s completion_tokens=%s total_tokens=%s",
-            os.getenv("GROQ_MODEL", "unknown"),
-            usage.get("prompt_tokens"),
-            usage.get("completion_tokens"),
-            usage.get("total_tokens"),
-        )
-    return data["choices"][0]["message"]["content"]
+    configured_model = _require_env("GROQ_MODEL")
+    candidate_models = [configured_model]
+    for fallback in ("llama-3.1-8b-instant", "openai/gpt-oss-20b", "llama3-8b-8192"):
+        if fallback not in candidate_models:
+            candidate_models.append(fallback)
+
+    last_error = None
+    for model_name in candidate_models:
+        try:
+            data = _post(
+                GROQ_URL,
+                {"Authorization": f"Bearer {_require_env('GROQ_API_KEY')}"},
+                {
+                    "model": model_name,
+                    "temperature": temperature,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                },
+            )
+            usage = data.get("usage")
+            if usage and isinstance(usage, dict):
+                logger.info(
+                    "[TOKEN_USAGE] provider=groq model=%s prompt_tokens=%s completion_tokens=%s total_tokens=%s",
+                    model_name,
+                    usage.get("prompt_tokens"),
+                    usage.get("completion_tokens"),
+                    usage.get("total_tokens"),
+                )
+            return data["choices"][0]["message"]["content"]
+        except LLMError as err:
+            err_str = str(err)
+            if (
+                "HTTP 404" in err_str
+                or "does not exist" in err_str
+                or "not have access" in err_str
+            ):
+                logger.warning(
+                    "Groq model '%s' unavailable (%s). Falling back to next candidate model.",
+                    model_name,
+                    err,
+                )
+                last_error = err
+                continue
+            raise
+    if last_error:
+        raise last_error
 
 
 def _gemini(system_prompt, user_prompt, temperature):

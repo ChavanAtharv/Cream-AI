@@ -236,3 +236,36 @@ def test_complete_does_not_retry_other_errors():
         with pytest.raises(llm.LLMError):
             llm.complete("s", "u")
     assert len(calls) == 1
+
+
+def test_groq_fallback_when_model_returns_404():
+    env = {
+        "LLM_PROVIDER": "groq",
+        "GROQ_API_KEY": "test-key",
+        "GROQ_MODEL": "llama-3.3-70b-versatile",
+    }
+    resp_404 = MagicMock(status_code=404)
+    resp_404.json.return_value = {
+        "error": {"message": "The model llama-3.3-70b-versatile does not exist or you do not have access to it."}
+    }
+    resp_404.raise_for_status.side_effect = requests.exceptions.HTTPError(response=resp_404)
+
+    resp_200 = MagicMock(status_code=200)
+    resp_200.json.return_value = {
+        "choices": [{"message": {"content": "Answer from fallback model"}}]
+    }
+    resp_200.raise_for_status.return_value = None
+
+    with patch.dict(os.environ, env), patch(
+        "app.llm.requests.post", side_effect=[resp_404, resp_200]
+    ) as mock_post:
+        reply = llm.complete("system", "user")
+        assert reply == "Answer from fallback model"
+        assert mock_post.call_count == 2
+        # First call was the configured model
+        first_model = mock_post.call_args_list[0].kwargs["json"]["model"]
+        assert first_model == "llama-3.3-70b-versatile"
+        # Second call was the fallback model
+        second_model = mock_post.call_args_list[1].kwargs["json"]["model"]
+        assert second_model == "llama-3.1-8b-instant"
+
